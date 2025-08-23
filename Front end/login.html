@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Tranzio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .login-container {
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 420px;
+            transform: translateY(0);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .login-container:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.6);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #00d4aa, #00a085);
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-family: 'Arial Black', 'Helvetica', sans-serif;
+            font-weight: 900;
+            letter-spacing: -2px;
+            font-style: italic;
+            color: white;
+            box-shadow: 0 8px 32px rgba(0, 212, 170, 0.4);
+            animation: logoFloat 3s ease-in-out infinite, logoFontPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
+        @keyframes logoFontPulse {
+            0%, 100% { 
+                font-weight: 900;
+                transform: scale(1) translateY(0px);
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            }
+            50% { 
+                font-weight: 950;
+                transform: scale(1.1) translateY(-3px);
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+            }
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: #a0a0a0;
+            font-size: 16px;
+            font-weight: 400;
+            margin-bottom: 8px;
+        }
+
+        .welcome-back {
+            color: #00d4aa;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e0e0e0;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 18px 20px;
+            border: 2px solid #404040;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 500;
+            background: #2a2a2a;
+            color: #ffffff;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: #00d4aa;
+            background: #333333;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 30px rgba(0, 212, 170, 0.25);
+        }
+
+        input:hover, select:hover {
+            border-color: #606060;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #808080;
+            pointer-events: none;
+        }
+
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #a0a0a0;
+            font-size: 14px;
+        }
+
+        .remember-me input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .forgot-password {
+            color: #00d4aa;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: #00b894;
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #00d4aa, #00a085);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            margin-bottom: 20px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 212, 170, 0.5);
+        }
+
+        .login-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 32px 0;
+            position: relative;
+            color: #808080;
+            font-size: 14px;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #404040, transparent);
+        }
+
+        .divider span {
+            background: rgba(30, 30, 30, 0.95);
+            padding: 0 24px;
+            font-weight: 500;
+        }
+
+        .signup-link {
+            text-align: center;
+        }
+
+        .signup-link a {
+            color: #00d4aa;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .signup-link a:hover {
+            color: #00b894;
+            text-decoration: underline;
+        }
+
+        .success-message, .error-message {
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-message {
+            background: #155724;
+            border: 2px solid #00d4aa;
+            color: #00d4aa;
+        }
+
+        .error-message {
+            background: #721c24;
+            border: 2px solid #e74c3c;
+            color: #e74c3c;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 32px 24px;
+                margin: 10px;
+                border-radius: 20px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+
+            .login-options {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+        }
+
+        .quick-demo {
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .quick-demo h3 {
+            color: #00d4aa;
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .demo-credentials {
+            font-size: 12px;
+            color: #a0a0a0;
+            line-height: 1.4;
+        }
+
+        .demo-btn {
+            background: rgba(0, 212, 170, 0.2);
+            border: 1px solid #00d4aa;
+            color: #00d4aa;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .demo-btn:hover {
+            background: rgba(0, 212, 170, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="header">
+            <div class="logo">Tn</div>
+            <h1>Welcome Back</h1>
+            <p class="subtitle">Sign in to your Tranzio account</p>
+            <p class="welcome-back">Track your bus in real-time</p>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            🎉 Login successful! Redirecting to dashboard...
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            Invalid credentials. Please try again.
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="loginEmail">Email Address</label>
+                <input type="email" id="loginEmail" name="loginEmail" placeholder="Enter your email address" required>
+                <span class="input-icon">✉️</span>
+            </div>
+
+            <div class="form-group">
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" name="loginPassword" placeholder="Enter your password" required>
+                <span class="input-icon">🔑</span>
+            </div>
+
+            <div class="login-options">
+                <div class="remember-me">
+                    <input type="checkbox" id="rememberMe" name="rememberMe">
+                    <label for="rememberMe" style="text-transform: none; color: #a0a0a0; font-weight: 400; margin: 0;">Remember me</label>
+                </div>
+                <a href="#" class="forgot-password" id="forgotPasswordLink">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="login-btn">Sign In</button>
+        </form>
+
+        <div class="quick-demo">
+            <h3>Quick Demo Access</h3>
+            <div class="demo-credentials">
+                <strong>Demo Email:</strong> demo@tranzio.com<br>
+                <strong>Demo Password:</strong> demo123
+            </div>
+            <button class="demo-btn" id="demoLogin">Use Demo Credentials</button>
+        </div>
+
+        <div class="divider">
+            <span>New to Tranzio?</span>
+        </div>
+
+        <div class="signup-link">
+            <p>Don't have an account? <a href="#" id="signupLink">Create Account</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('loginForm');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const emailInput = document.getElementById('loginEmail');
+            const passwordInput = document.getElementById('loginPassword');
+            const demoBtn = document.getElementById('demoLogin');
+
+            // Add floating animations to inputs
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.style.transform = 'translateY(-1px)';
+                });
+
+                input.addEventListener('blur', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Real-time email validation
+            emailInput.addEventListener('blur', function() {
+                const isValid = validateEmail(this.value);
+                this.style.borderColor = isValid ? '#00d4aa' : '#e74c3c';
+            });
+
+            // Demo login functionality
+            demoBtn.addEventListener('click', function() {
+                emailInput.value = 'demo@tranzio.com';
+                passwordInput.value = 'demo123';
+                
+                // Add highlight effect
+                emailInput.style.borderColor = '#00d4aa';
+                passwordInput.style.borderColor = '#00d4aa';
+                
+                // Auto-focus on submit button
+                setTimeout(() => {
+                    document.querySelector('.login-btn').focus();
+                }, 300);
+            });
+
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                hideMessages();
+
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+
+                if (!validateForm(data)) {
+                    return;
+                }
+
+                // Simulate login
+                const submitBtn = form.querySelector('.login-btn');
+                const originalText = submitBtn.textContent;
+                
+                submitBtn.textContent = 'Signing In...';
+                submitBtn.disabled = true;
+
+                setTimeout(() => {
+                    // Check if demo credentials
+                    if (data.loginEmail === 'demo@tranzio.com' && data.loginPassword === 'demo123') {
+                        showSuccess();
+                        // Simulate redirect after 2 seconds
+                        setTimeout(() => {
+                            alert('Redirecting to Tranzio dashboard...');
+                        }, 2000);
+                    } else if (data.loginEmail && data.loginPassword) {
+                        // Simulate successful login for any valid email/password
+                        showSuccess();
+                        setTimeout(() => {
+                            alert('Redirecting to Tranzio dashboard...');
+                        }, 2000);
+                    } else {
+                        showError('Invalid credentials. Please try again.');
+                    }
+                    
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }, 1500);
+            });
+
+            function validateForm(data) {
+                if (!data.loginEmail || !data.loginPassword) {
+                    showError('Please fill in all required fields.');
+                    return false;
+                }
+
+                if (!validateEmail(data.loginEmail)) {
+                    showError('Please enter a valid email address.');
+                    return false;
+                }
+
+                return true;
+            }
+
+            function validateEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            function showSuccess() {
+                successMessage.style.display = 'block';
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            function hideMessages() {
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+            }
+
+            // Link handlers
+            document.getElementById('signupLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Signup page would be loaded here!');
+            });
+
+            document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Password reset page would be loaded here!');
+            });
+
+            // Add ripple effect to button
+            const button = document.querySelector('.login-btn');
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('div');
+                const rect = button.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    border-radius: 50%;
+                    background: rgba(255,255,255,0.3);
+                    transform: scale(0);
+                    animation: ripple 0.6s linear;
+                    left: ${x}px;
+                    top: ${y}px;
+                    width: ${size}px;
+                    height: ${size}px;
+                `;
+                
+                button.style.position = 'relative';
+                button.style.overflow = 'hidden';
+                button.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+
+            // Add CSS for ripple animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes ripple {
+                    to {
+                        transform: scale(4);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - Tranzio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .signup-container {
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 460px;
+            transform: translateY(0);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .signup-container:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.6);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .logo {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, #00d4aa, #00a085);
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-family: 'Arial Black', 'Helvetica', sans-serif;
+            font-weight: 900;
+            letter-spacing: -2px;
+            font-style: italic;
+            box-shadow: 0 8px 32px rgba(0, 212, 170, 0.4);
+            animation: logoFloat 3s ease-in-out infinite, logoFontPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes logoFontPulse {
+            0%, 100% { 
+                font-weight: 900;
+                transform: scale(1) translateY(0px);
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            }
+            50% { 
+                font-weight: 950;
+                transform: scale(1.1) translateY(-3px);
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+            }
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: #a0a0a0;
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e0e0e0;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #404040;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 500;
+            background: #2a2a2a;
+            color: #ffffff;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: #00d4aa;
+            background: #333333;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 30px rgba(0, 212, 170, 0.25);
+        }
+
+        input:hover, select:hover {
+            border-color: #606060;
+        }
+
+        .contact-method {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .method-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .method-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .method-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 16px;
+            border: 2px solid #404040;
+            border-radius: 12px;
+            background: #2a2a2a;
+            color: #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 14px;
+            gap: 8px;
+        }
+
+        .method-option input[type="radio"]:checked + .method-label {
+            border-color: #00d4aa;
+            background: linear-gradient(135deg, #00d4aa, #00a085);
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .contact-input {
+            margin-top: 12px;
+        }
+
+        .signup-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #00d4aa, #00a085);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            margin-top: 12px;
+        }
+
+        .signup-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 212, 170, 0.5);
+        }
+
+        .signup-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .signup-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 32px 0;
+            position: relative;
+            color: #808080;
+            font-size: 14px;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #404040, transparent);
+        }
+
+        .divider span {
+            background: rgba(30, 30, 30, 0.95);
+            padding: 0 24px;
+            font-weight: 500;
+        }
+
+        .login-link {
+            text-align: center;
+        }
+
+        .login-link a {
+            color: #00d4aa;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #00b894;
+            text-decoration: underline;
+        }
+
+        .success-message, .error-message {
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-message {
+            background: #155724;
+            border: 2px solid #00d4aa;
+            color: #00d4aa;
+        }
+
+        .error-message {
+            background: #721c24;
+            border: 2px solid #e74c3c;
+            color: #e74c3c;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #808080;
+            pointer-events: none;
+        }
+
+        @media (max-width: 480px) {
+            .signup-container {
+                padding: 32px 24px;
+                margin: 10px;
+                border-radius: 20px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .contact-method {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="header">
+            <div class="logo">Tn</div>
+            <h1>Tranzio</h1>
+            <p class="subtitle">Track your bus in real-time</p>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            🎉 Account created successfully! Welcome to Tranzio!
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            Please fill in all required fields correctly.
+        </div>
+
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+                <span class="input-icon">👨‍💼</span>
+            </div>
+
+            <div class="form-group">
+                <label>Contact Method</label>
+                <div class="contact-method">
+                    <div class="method-option">
+                        <input type="radio" id="emailMethod" name="contactMethod" value="email" required>
+                        <label for="emailMethod" class="method-label">
+                            ✉️ Email
+                        </label>
+                    </div>
+                    <div class="method-option">
+                        <input type="radio" id="phoneMethod" name="contactMethod" value="phone" required>
+                        <label for="phoneMethod" class="method-label">
+                            📞 Phone
+                        </label>
+                    </div>
+                </div>
+                <div class="contact-input" id="contactInput" style="display: none;">
+                    <input type="text" id="contactValue" name="contactValue" placeholder="Enter your contact information" required>
+                    <span class="input-icon" id="contactIcon">✉️</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="userRole">User Role</label>
+                <select id="userRole" name="userRole" required>
+                    <option value="">Select your role</option>
+                    <option value="passenger">Passenger</option>
+                    <option value="driver">Driver</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Create a strong password" required>
+                <span class="input-icon">🔑</span>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                <span class="input-icon">✅</span>
+            </div>
+
+            <button type="submit" class="signup-btn">Create Account</button>
+        </form>
+
+        <div class="divider">
+            <span>Already have an account?</span>
+        </div>
+
+        <div class="login-link">
+            <a href="#" id="loginLink">Sign In Here</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('signupForm');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const contactMethods = document.querySelectorAll('input[name="contactMethod"]');
+            const contactInput = document.getElementById('contactInput');
+            const contactValue = document.getElementById('contactValue');
+            const contactIcon = document.getElementById('contactIcon');
+
+            // Handle contact method selection
+            contactMethods.forEach(method => {
+                method.addEventListener('change', function() {
+                    contactInput.style.display = 'block';
+                    contactValue.value = '';
+                    
+                    if (this.value === 'email') {
+                        contactValue.type = 'email';
+                        contactValue.placeholder = 'Enter your email address';
+                        contactIcon.textContent = '✉️';
+                    } else if (this.value === 'phone') {
+                        contactValue.type = 'tel';
+                        contactValue.placeholder = 'Enter your phone number';
+                        contactIcon.textContent = '📞';
+                    }
+                    
+                    // Add smooth animation
+                    contactInput.style.opacity = '0';
+                    contactInput.style.transform = 'translateY(-10px)';
+                    setTimeout(() => {
+                        contactInput.style.transition = 'all 0.3s ease';
+                        contactInput.style.opacity = '1';
+                        contactInput.style.transform = 'translateY(0)';
+                        contactValue.focus();
+                    }, 50);
+                });
+            });
+
+            // Real-time password validation
+            const passwordInput = document.getElementById('password');
+            passwordInput.addEventListener('input', function() {
+                const strength = getPasswordStrength(this.value);
+                this.style.borderColor = getStrengthColor(strength);
+            });
+
+            // Real-time email validation
+            contactValue.addEventListener('blur', function() {
+                const selectedMethod = document.querySelector('input[name="contactMethod"]:checked');
+                if (selectedMethod && selectedMethod.value === 'email') {
+                    const isValid = validateEmail(this.value);
+                    this.style.borderColor = isValid ? '#00d4aa' : '#e74c3c';
+                }
+            });
+
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                hideMessages();
+
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+
+                if (!validateForm(data)) {
+                    return;
+                }
+
+                // Simulate account creation
+                const submitBtn = form.querySelector('.signup-btn');
+                const originalText = submitBtn.textContent;
+                
+                submitBtn.textContent = 'Creating Account...';
+                submitBtn.disabled = true;
+
+                setTimeout(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                    showSuccess();
+                    form.reset();
+                    contactInput.style.display = 'none';
+                }, 2000);
+            });
+
+            function validateForm(data) {
+                // Check required fields
+                if (!data.fullName || !data.contactMethod || !data.contactValue || !data.userRole || !data.password || !data.confirmPassword) {
+                    showError('Please fill in all required fields.');
+                    return false;
+                }
+
+                // Validate contact based on method
+                if (data.contactMethod === 'email' && !validateEmail(data.contactValue)) {
+                    showError('Please enter a valid email address.');
+                    return false;
+                }
+
+                if (data.contactMethod === 'phone' && data.contactValue.length < 10) {
+                    showError('Please enter a valid phone number.');
+                    return false;
+                }
+
+                // Password validation
+                if (data.password.length < 6) {
+                    showError('Password must be at least 6 characters long.');
+                    return false;
+                }
+
+                if (data.password !== data.confirmPassword) {
+                    showError('Passwords do not match.');
+                    return false;
+                }
+
+                return true;
+            }
+
+            function validateEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            function getPasswordStrength(password) {
+                let strength = 0;
+                if (password.length >= 6) strength++;
+                if (password.length >= 8) strength++;
+                if (/[A-Z]/.test(password)) strength++;
+                if (/[a-z]/.test(password)) strength++;
+                if (/[0-9]/.test(password)) strength++;
+                if (/[^A-Za-z0-9]/.test(password)) strength++;
+                return Math.min(strength, 5);
+            }
+
+            function getStrengthColor(strength) {
+                const colors = ['#e74c3c', '#e67e22', '#f1c40f', '#00d4aa', '#00a085'];
+                return colors[Math.max(0, strength - 1)] || '#404040';
+            }
+
+            function showSuccess() {
+                successMessage.style.display = 'block';
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            function hideMessages() {
+                successMessage.style.display = 'none';
+                errorMessage.style.display = 'none';
+            }
+
+            // Login link handler
+            document.getElementById('loginLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Login page would be loaded here!');
+            });
+
+            // Add floating animations to inputs
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.style.transform = 'translateY(-1px)';
+                });
+
+                input.addEventListener('blur', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
