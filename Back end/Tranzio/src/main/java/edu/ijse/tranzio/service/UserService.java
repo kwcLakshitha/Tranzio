@@ -1,7 +1,10 @@
 package edu.ijse.tranzio.service;
 
-import edu.ijse.tranzio.entity.User;
+import edu.ijse.tranzio.dto.LoginDto;
+import edu.ijse.tranzio.dto.SignUpDto;
 
 public interface UserService {
-    void   save(User user);
+    String save(SignUpDto signUpDto);
+
+    Object login(LoginDto loginDto);
 }
