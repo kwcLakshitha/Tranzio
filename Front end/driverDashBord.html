@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Driver Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3d 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Particle Background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: radial-gradient(circle, rgba(0, 221, 235, 0.1) 0%, transparent 70%);
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: rgba(20, 20, 50, 0.95);
+            backdrop-filter: blur(12px);
+            padding: 20px;
+            transition: transform 0.4s ease;
+            position: fixed;
+            height: 100%;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(0, 221, 235, 0.2);
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-280px);
+        }
+
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar-header h2 {
+            color: #00ddeb;
+            font-size: 1.6rem;
+            text-shadow: 0 0 10px rgba(0, 221, 235, 0.5);
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            color: #b0b0d0;
+            text-decoration: none;
+            margin: 8px 0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-nav a i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background: #00ddeb;
+            color: #0f0f23;
+            transform: translateX(5px);
+            box-shadow: 0 0 10px rgba(0, 221, 235, 0.5);
+        }
+
+        /* Toggle Button */
+        .toggle-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #00ddeb;
+            color: #0f0f23;
+            border: none;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1100;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            background: #00b8c4;
+            transform: rotate(90deg);
+            box-shadow: 0 0 10px rgba(0, 221, 235, 0.5);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            margin-left: 280px;
+            transition: margin-left 0.4s ease;
+        }
+
+        .main-content.full {
+            margin-left: 0;
+        }
+
+        .header {
+            background: rgba(20, 20, 50, 0.95);
+            backdrop-filter: blur(12px);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(0, 221, 235, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            color: #00ddeb;
+            text-shadow: 0 0 10px rgba(0, 221, 235, 0.5);
+        }
+
+        .header .date-time {
+            font-size: 1rem;
+            color: #b0b0d0;
+        }
+
+        /* Login Section */
+        .login-section {
+            background: rgba(30, 30, 60, 0.95);
+            backdrop-filter: blur(12px);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            margin: 100px auto;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1rem;
+            color: #b0b0d0;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(50, 50, 80, 0.8);
+            color: #e0e0e0;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 221, 235, 0.5);
+            background: rgba(70, 70, 100, 0.8);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #00ddeb;
+            color: #0f0f23;
+        }
+
+        .btn-primary:hover {
+            background: #00b8c4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 221, 235, 0.5);
+        }
+
+        .btn-secondary {
+            background: #ffb300;
+            color: #0f0f23;
+        }
+
+        .btn-secondary:hover {
+            background: #e0a200;
+            transform: translateY(-2px);
+        }
+
+        /* Dashboard Section */
+        .dashboard-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .card {
+            background: rgba(30, 30, 60, 0.95);
+            backdrop-filter: blur(12px);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .card:hover {
+            transform: perspective(1000px) rotateX(2deg) rotateY(2deg);
+            box-shadow: 0 8px 20px rgba(0, 221, 235, 0.3);
+        }
+
+        .card h3 {
+            color: #00ddeb;
+            margin-bottom: 15px;
+            font-size: 1.6rem;
+            text-shadow: 0 0 5px rgba(0, 221, 235, 0.5);
+        }
+
+        .card p {
+            margin: 8px 0;
+            font-size: 1rem;
+            color: #e0e0e0;
+        }
+
+        .card p strong {
+            color: #b0b0d0;
+        }
+
+        /* Editable Fields */
+        .editable input {
+            background: transparent;
+            border: 1px solid #b0b0d0;
+            padding: 5px;
+            color: #e0e0e0;
+            border-radius: 4px;
+        }
+
+        /* Timetable Visualization */
+        .timetable {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(50, 50, 80, 0.8);
+            border-radius: 8px;
+        }
+
+        .timetable-bar {
+            height: 30px;
+            background: #2a2a4a;
+            border-radius: 6px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timetable-active {
+            background: #00ddeb;
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+
+        .timetable-current {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: #ff4d4d;
+            top: 0;
+            transition: left 0.5s ease;
+        }
+
+        .timetable-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: #b0b0d0;
+        }
+
+        /* Route Map Placeholder */
+        .route-map {
+            height: 200px;
+            background: linear-gradient(45deg, #2a2a4a, #3a3a5a);
+            border-radius: 8px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b0b0d0;
+            font-size: 1.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .route-map::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 221, 235, 0.2) 10%, transparent 70%);
+            animation: pulse 5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.3; }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: #fff;
+            background: #dc3545;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1200;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-280px);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .main-content.full {
+                margin-left: 0;
+            }
+            .toggle-btn {
+                display: block;
+            }
+            .login-section {
+                margin: 20px;
+                padding: 20px;
+            }
+            .card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles"></div>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Driver Portal</h2>
+            </div>
+            <div class="sidebar-nav">
+                <a href="#driver-info" class="active"><i class="fas fa-user"></i> Driver Info</a>
+                <a href="#bus-info"><i class="fas fa-bus"></i> Bus Details</a>
+                <a href="#road-info"><i class="fas fa-road"></i> Route Details</a>
+                <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+
+        <!-- Toggle Button -->
+        <button class="toggle-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+        <!-- Main Content -->
+        <div class="main-content" id="main-content">
+            <div class="header">
+                <h1>Welcome, <span id="welcome-name">Driver</span></h1>
+                <div class="date-time" id="date-time"></div>
+            </div>
+
+            <!-- Login Section -->
+            <div class="login-section" id="login-section">
+                <div class="form-group">
+                    <label for="driverId">Enter Driver ID</label>
+                    <input type="text" id="driverId" placeholder="e.g., D001">
+                </div>
+                <button class="btn btn-primary" onclick="loginDriver()">Login</button>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div class="dashboard-section" id="dashboard-section">
+                <div class="card" id="driver-info">
+                    <h3>Driver Information</h3>
+                    <p><strong>ID:</strong> <span id="driver-id"></span></p>
+                    <p><strong>Name:</strong> <span id="driver-name"></span></p>
+                    <p class="editable"><strong>Phone:</strong> <input id="driver-phone" placeholder="Enter phone"></p>
+                    <p class="editable"><strong>Email:</strong> <input id="driver-email" placeholder="Enter email"></p>
+                    <p><strong>NIC:</strong> <span id="driver-nic"></span></p>
+                    <button class="btn btn-secondary" onclick="saveDriverInfo()">Save Changes</button>
+                </div>
+                <div class="card" id="bus-info">
+                    <h3>Assigned Bus</h3>
+                    <p><strong>Number Plate:</strong> <span id="bus-number-plate"></span></p>
+                    <p><strong>Bus Name:</strong> <span id="bus-name"></span></p>
+                </div>
+                <div class="card" id="road-info">
+                    <h3>Route Details</h3>
+                    <p><strong>Road Number:</strong> <span id="road-number"></span></p>
+                    <p><strong>Road Name:</strong> <span id="road-name"></span></p>
+                    <p><strong>Start Time:</strong> <span id="start-time"></span></p>
+                    <p><strong>End Time:</strong> <span id="end-time"></span></p>
+                    <div class="timetable">
+                        <h4>Route Timeline</h4>
+                        <div class="timetable-bar">
+                            <div class="timetable-active" id="timetable-active"></div>
+                            <div class="timetable-current" id="timetable-current"></div>
+                        </div>
+                        <div class="timetable-labels">
+                            <span id="timetable-start"></span>
+                            <span id="timetable-current-time"></span>
+                            <span id="timetable-end"></span>
+                        </div>
+                    </div>
+                    <div class="route-map">Route Map Placeholder (Integrate with Map API)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample dataset
+        const buses = [
+            { numberPlate: "NP-1234", busName: "City Express", rdNumber: "R001", driverId: "D001" },
+            { numberPlate: "NP-5678", busName: "Metro Star", rdNumber: "R002", driverId: "D002" }
+        ];
+        let drivers = [
+            { driverId: "D001", driverName: "John Doe", driverPhone: "+1234567890", driverEmail: "john.doe@example.com", driverNic: "123456789V" },
+            { driverId: "D002", driverName: "Jane Smith", driverPhone: "+0987654321", driverEmail: "jane.smith@example.com", driverNic: "987654321V" }
+        ];
+        const roads = [
+            { rdNumber: "R001", roadName: "Main Street", startTime: "08:00", endTime: "18:00" },
+            { rdNumber: "R002", roadName: "Highway 101", startTime: "06:00", endTime: "20:00" }
+        ];
+
+        let currentDriverId = null;
+
+        // Update date and time
+        function updateDateTime() {
+            const now = new Date();
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'Asia/Colombo'
+            };
+            document.getElementById('date-time').textContent = now.toLocaleString('en-US', options);
+        }
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // Sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            sidebar.classList.toggle('hidden');
+            mainContent.classList.toggle('full');
+            sidebar.classList.toggle('active');
+        }
+
+        // Smooth scroll for sidebar links
+        document.querySelectorAll('.sidebar-nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                if (this.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+                    this.classList.add('active');
+                    const target = document.querySelector(this.getAttribute('href'));
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Login function
+        function loginDriver() {
+            const driverId = document.getElementById('driverId').value.trim();
+            const driver = drivers.find(d => d.driverId === driverId);
+
+            if (driver) {
+                currentDriverId = driverId;
+                // Hide login section, show dashboard
+                document.getElementById('login-section').style.display = 'none';
+                const dashboard = document.getElementById('dashboard-section');
+                dashboard.style.display = 'block';
+                setTimeout(() => {
+                    dashboard.style.opacity = '1';
+                }, 50);
+
+                // Update welcome message
+                document.getElementById('welcome-name').textContent = driver.driverName;
+
+                // Populate driver info
+                document.getElementById('driver-id').textContent = driver.driverId;
+                document.getElementById('driver-name').textContent = driver.driverName;
+                document.getElementById('driver-phone').value = driver.driverPhone;
+                document.getElementById('driver-email').value = driver.driverEmail;
+                document.getElementById('driver-nic').textContent = driver.driverNic;
+
+                // Find assigned bus
+                const bus = buses.find(b => b.driverId === driverId);
+                if (bus) {
+                    document.getElementById('bus-number-plate').textContent = bus.numberPlate;
+                    document.getElementById('bus-name').textContent = bus.busName;
+
+                    // Find associated road
+                    const road = roads.find(r => r.rdNumber === bus.rdNumber);
+                    if (road) {
+                        document.getElementById('road-number').textContent = road.rdNumber;
+                        document.getElementById('road-name').textContent = road.roadName;
+                        document.getElementById('start-time').textContent = road.startTime;
+                        document.getElementById('end-time').textContent = road.endTime;
+
+                        // Timetable visualization
+                        updateTimetable(road);
+                    } else {
+                        document.getElementById('road-info').innerHTML = '<p>No route assigned.</p>';
+                    }
+                } else {
+                    document.getElementById('bus-info').innerHTML = '<p>No bus assigned.</p>';
+                    document.getElementById('road-info').innerHTML = '<p>No route assigned.</p>';
+                }
+            } else {
+                showNotification('Invalid Driver ID. Please try again.', 'error');
+            }
+        }
+
+        // Update timetable with live progress
+        function updateTimetable(road) {
+            const startTime = road.startTime.split(':').map(Number);
+            const endTime = road.endTime.split(':').map(Number);
+            const startMinutes = startTime[0] * 60 + startTime[1];
+            const endMinutes = endTime[0] * 60 + endTime[1];
+            const totalMinutes = 24 * 60;
+            const width = ((endMinutes - startMinutes) / totalMinutes) * 100;
+
+            document.getElementById('timetable-active').style.width = `${width}%`;
+            document.getElementById('timetable-start').textContent = road.startTime;
+            document.getElementById('timetable-end').textContent = road.endTime;
+
+            // Live progress
+            function updateCurrentTime() {
+                const now = new Date();
+                const currentMinutes = now.getHours() * 60 + now.getMinutes();
+                const progress = ((currentMinutes - startMinutes) / (endMinutes - startMinutes)) * 100;
+                const currentTimeElement = document.getElementById('timetable-current');
+                const currentTimeLabel = document.getElementById('timetable-current-time');
+
+                if (currentMinutes >= startMinutes && currentMinutes <= endMinutes) {
+                    currentTimeElement.style.left = `${progress}%`;
+                    currentTimeLabel.textContent = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+                } else {
+                    currentTimeElement.style.display = 'none';
+                    currentTimeLabel.textContent = '';
+                }
+            }
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 60000); // Update every minute
+        }
+
+        // Save driver info
+        function saveDriverInfo() {
+            if (!currentDriverId) return;
+            const phone = document.getElementById('driver-phone').value;
+            const email = document.getElementById('driver-email').value;
+
+            // Basic validation
+            if (!phone.match(/^\+?\d{10,}$/) || !email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)) {
+                showNotification('Invalid phone or email format.', 'error');
+                return;
+            }
+
+            const driver = drivers.find(d => d.driverId === currentDriverId);
+            if (driver) {
+                driver.driverPhone = phone;
+                driver.driverEmail = email;
+                showNotification('Profile updated successfully!');
+            }
+        }
+
+        // Logout function
+        function logout() {
+            currentDriverId = null;
+            document.getElementById('dashboard-section').style.display = 'none';
+            document.getElementById('login-section').style.display = 'block';
+            document.getElementById('driverId').value = '';
+            document.getElementById('sidebar').classList.add('hidden');
+            document.getElementById('main-content').classList.add('full');
+            showNotification('Logged out successfully!');
+        }
+
+        // Notification system
+        function showNotification(message, type = 'error') {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.style.background = type === 'error' ? '#dc3545' : '#28a745';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.opacity = '1';
+            }, 50);
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

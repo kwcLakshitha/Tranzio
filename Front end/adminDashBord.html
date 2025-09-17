@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Time Management Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e1e2f 0%, #2c2c54 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #00ddeb;
+            text-shadow: 0 0 10px rgba(0, 221, 235, 0.5);
+            margin-bottom: 30px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: #2a2a4a;
+            border-radius: 12px 12px 0 0;
+            cursor: pointer;
+            font-weight: bold;
+            color: #b0b0d0;
+            transition: all 0.3s ease;
+        }
+
+        .tab:hover, .tab.active {
+            background: #00ddeb;
+            color: #1e1e2f;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0, 221, 235, 0.3);
+        }
+
+        .section {
+            background: #2a2a4a;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.5s ease-in-out;
+            margin-bottom: 30px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: #b0b0d0;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #3a3a5a;
+            color: #e0e0e0;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 221, 235, 0.5);
+            background: #4a4a6a;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #00ddeb;
+            color: #1e1e2f;
+        }
+
+        .btn-primary:hover {
+            background: #00b8c4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 221, 235, 0.3);
+        }
+
+        .btn-update {
+            background: #ffb300;
+            color: #1e1e2f;
+        }
+
+        .btn-update:hover {
+            background: #e0a200;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #ff4d4d;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #e03e3e;
+            transform: translateY(-2px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background: #00ddeb;
+            color: #1e1e2f;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        td {
+            background: #3a3a5a;
+            border-radius: 8px;
+        }
+
+        tr {
+            transition: transform 0.3s ease;
+        }
+
+        tr:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                grid-template-columns: 1fr;
+            }
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bus Time Management Dashboard</h1>
+        <div class="tabs">
+            <div class="tab active" onclick="showSection('bus')">Buses</div>
+            <div class="tab" onclick="showSection('driver')">Drivers</div>
+            <div class="tab" onclick="showSection('road')">Roads</div>
+        </div>
+
+        <!-- Bus Section -->
+        <div class="section" id="bus-section">
+            <h2>Manage Buses</h2>
+            <div class="form-container">
+                <div class="form-group">
+                    <label>Number Plate</label>
+                    <input type="text" id="busNumberPlate" placeholder="Enter number plate">
+                </div>
+                <div class="form-group">
+                    <label>Bus Name</label>
+                    <input type="text" id="busName" placeholder="Enter bus name">
+                </div>
+                <div class="form-group">
+                    <label>Route Number</label>
+                    <input type="text" id="busRdNumber" placeholder="Enter road number">
+                </div>
+                <div class="form-group">
+                    <label>Driver ID</label>
+                    <input type="text" id="busDriverId" placeholder="Enter driver ID">
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="addBus()">Add Bus</button>
+            <table id="busTable">
+                <thead>
+                    <tr>
+                        <th>Number Plate</th>
+                        <th>Bus Name</th>
+                        <th>Route Number</th>
+                        <th>Driver ID</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="busTableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Driver Section -->
+        <div class="section" id="driver-section" style="display: none;">
+            <h2>Manage Drivers</h2>
+            <div class="form-container">
+                <div class="form-group">
+                    <label>Driver ID</label>
+                    <input type="text" id="driverId" placeholder="Enter driver ID">
+                </div>
+                <div class="form-group">
+                    <label>Driver Name</label>
+                    <input type="text" id="driverName" placeholder="Enter driver name">
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="text" id="driverPhone" placeholder="Enter phone number">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="driverEmail" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                    <label>NIC</label>
+                    <input type="text" id="driverNic" placeholder="Enter NIC">
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="addDriver()">Add Driver</button>
+            <table id="driverTable">
+                <thead>
+                    <tr>
+                        <th>Driver ID</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>NIC</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="driverTableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Road Section -->
+        <div class="section" id="road-section" style="display: none;">
+            <h2>Manage Roads</h2>
+            <div class="form-container">
+                <div class="form-group">
+                    <label>Route Number</label>
+                    <input type="text" id="roadRdNumber" placeholder="Enter road number">
+                </div>
+                <div class="form-group">
+                    <label>Road Name</label>
+                    <input type="text" id="roadName" placeholder="Enter road name">
+                </div>
+                <div class="form-group">
+                    <label>Start Time</label>
+                    <input type="time" id="startTime" placeholder="Enter start time">
+                </div>
+                <div class="form-group">
+                    <label>End Time</label>
+                    <input type="time" id="endTime" placeholder="Enter end time">
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="addRoad()">Add Road</button>
+            <table id="roadTable">
+                <thead>
+                    <tr>
+                        <th>Route Number</th>
+                        <th>Road Name</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="roadTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Data storage
+        let buses = [];
+        let drivers = [];
+        let roads = [];
+
+        // Tab switching with animation
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(s => {
+                s.style.display = 'none';
+                s.style.opacity = '0';
+            });
+            const activeSection = document.getElementById(`${section}-section`);
+            activeSection.style.display = 'block';
+            setTimeout(() => {
+                activeSection.style.opacity = '1';
+            }, 50);
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.tab[onclick="showSection('${section}')"]`).classList.add('active');
+        }
+
+        // Bus Operations
+        function addBus() {
+            const numberPlate = document.getElementById('busNumberPlate').value;
+            const busName = document.getElementById('busName').value;
+            const rdNumber = document.getElementById('busRdNumber').value;
+            const driverId = document.getElementById('busDriverId').value;
+
+            if (numberPlate && busName && rdNumber && driverId) {
+                buses.push({ numberPlate, busName, rdNumber, driverId });
+                updateBusTable();
+                clearBusForm();
+                showNotification('Bus added successfully!');
+            } else {
+                showNotification('Please fill all fields', 'error');
+            }
+        }
+
+        function updateBus(numberPlate) {
+            const bus = buses.find(b => b.numberPlate === numberPlate);
+            if (bus) {
+                bus.busName = prompt('Enter new bus name', bus.busName) || bus.busName;
+                bus.rdNumber = prompt('Enter new road number', bus.rdNumber) || bus.rdNumber;
+                bus.driverId = prompt('Enter new driver ID', bus.driverId) || bus.driverId;
+                updateBusTable();
+                showNotification('Bus updated successfully!');
+            }
+        }
+
+        function deleteBus(numberPlate) {
+            buses = buses.filter(b => b.numberPlate !== numberPlate);
+            updateBusTable();
+            showNotification('Bus deleted successfully!');
+        }
+
+        function updateBusTable() {
+            const tbody = document.getElementById('busTableBody');
+            tbody.innerHTML = '';
+            buses.forEach(bus => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${bus.numberPlate}</td>
+                    <td>${bus.busName}</td>
+                    <td>${bus.rdNumber}</td>
+                    <td>${bus.driverId}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-update" onclick="updateBus('${bus.numberPlate}')">Update</button>
+                        <button class="btn btn-danger" onclick="deleteBus('${bus.numberPlate}')">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function clearBusForm() {
+            document.getElementById('busNumberPlate').value = '';
+            document.getElementById('busName').value = '';
+            document.getElementById('busRdNumber').value = '';
+            document.getElementById('busDriverId').value = '';
+        }
+
+        // Driver Operations
+        function addDriver() {
+            const driverId = document.getElementById('driverId').value;
+            const driverName = document.getElementById('driverName').value;
+            const driverPhone = document.getElementById('driverPhone').value;
+            const driverEmail = document.getElementById('driverEmail').value;
+            const driverNic = document.getElementById('driverNic').value;
+
+            if (driverId && driverName && driverPhone && driverEmail && driverNic) {
+                drivers.push({ driverId, driverName, driverPhone, driverEmail, driverNic });
+                updateDriverTable();
+                clearDriverForm();
+                showNotification('Driver added successfully!');
+            } else {
+                showNotification('Please fill all fields', 'error');
+            }
+        }
+
+        function updateDriver(driverId) {
+            const driver = drivers.find(d => d.driverId === driverId);
+            if (driver) {
+                driver.driverName = prompt('Enter new driver name', driver.driverName) || driver.driverName;
+                driver.driverPhone = prompt('Enter new phone', driver.driverPhone) || driver.driverPhone;
+                driver.driverEmail = prompt('Enter new email', driver.driverEmail) || driver.driverEmail;
+                driver.driverNic = prompt('Enter new NIC', driver.driverNic) || driver.driverNic;
+                updateDriverTable();
+                showNotification('Driver updated successfully!');
+            }
+        }
+
+        function deleteDriver(driverId) {
+            drivers = drivers.filter(d => d.driverId !== driverId);
+            updateDriverTable();
+            showNotification('Driver deleted successfully!');
+        }
+
+        function updateDriverTable() {
+            const tbody = document.getElementById('driverTableBody');
+            tbody.innerHTML = '';
+            drivers.forEach(driver => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${driver.driverId}</td>
+                    <td>${driver.driverName}</td>
+                    <td>${driver.driverPhone}</td>
+                    <td>${driver.driverEmail}</td>
+                    <td>${driver.driverNic}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-update" onclick="updateDriver('${driver.driverId}')">Update</button>
+                        <button class="btn btn-danger" onclick="deleteDriver('${driver.driverId}')">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function clearDriverForm() {
+            document.getElementById('driverId').value = '';
+            document.getElementById('driverName').value = '';
+            document.getElementById('driverPhone').value = '';
+            document.getElementById('driverEmail').value = '';
+            document.getElementById('driverNic').value = '';
+        }
+
+        // Road Operations
+        function addRoad() {
+            const rdNumber = document.getElementById('roadRdNumber').value;
+            const roadName = document.getElementById('roadName').value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+
+            if (rdNumber && roadName && startTime && endTime) {
+                roads.push({ rdNumber, roadName, startTime, endTime });
+                updateRoadTable();
+                clearRoadForm();
+                showNotification('Road added successfully!');
+            } else {
+                showNotification('Please fill all fields', 'error');
+            }
+        }
+
+        function updateRoad(rdNumber) {
+            const road = roads.find(r => r.rdNumber === rdNumber);
+            if (road) {
+                road.roadName = prompt('Enter new road name', road.roadName) || road.roadName;
+                road.startTime = prompt('Enter new start time (HH:MM)', road.startTime) || road.startTime;
+                road.endTime = prompt('Enter new end time (HH:MM)', road.endTime) || road.endTime;
+                updateRoadTable();
+                showNotification('Road updated successfully!');
+            }
+        }
+
+        function deleteRoad(rdNumber) {
+            roads = roads.filter(r => r.rdNumber !== rdNumber);
+            updateRoadTable();
+            showNotification('Road deleted successfully!');
+        }
+
+        function updateRoadTable() {
+            const tbody = document.getElementById('roadTableBody');
+            tbody.innerHTML = '';
+            roads.forEach(road => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${road.rdNumber}</td>
+                    <td>${road.roadName}</td>
+                    <td>${road.startTime}</td>
+                    <td>${road.endTime}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-update" onclick="updateRoad('${road.rdNumber}')">Update</button>
+                        <button class="btn btn-danger" onclick="deleteRoad('${road.rdNumber}')">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function clearRoadForm() {
+            document.getElementById('roadRdNumber').value = '';
+            document.getElementById('roadName').value = '';
+            document.getElementById('startTime').value = '';
+            document.getElementById('endTime').value = '';
+        }
+        // Notification System
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.bottom = '20px';
+            notification.style.right = '20px';
+            notification.style.padding = '15px 25px';
+            notification.style.borderRadius = '8px';
+            notification.style.color = '#fff';
+            notification.style.background = type === 'success' ? '#28a745' : '#dc3545';
+            notification.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.3)';
+            notification.style.opacity = '0';
+            notification.style.transition = 'opacity 0.3s ease';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.opacity = '1';
+            }, 50);
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
